@@ -73,7 +73,7 @@ class MeetingController extends Controller
         }
 
         $response = [
-            'msg' => 'Message not created',
+            'msg' => 'Meeting not created',
             ];
 
         return response()->json($response, 404);
