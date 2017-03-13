@@ -15,6 +15,12 @@ class RegistrationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('jwt.auth');
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [
