@@ -74,11 +74,17 @@ class RegistrationController extends Controller
     {
 
         $meeting = Meeting::findOrFail($id);
-        $meeting->users()->detach();
+        if (! $user = JWTAuth::parseToken()->authenticate()){
+            return response()->json(['msg'=>'User not found'], 404);
+        }
+        if (!$meeting->users()->where('users.id', $user->id)->first()){
+            return response()->json(['msg'=>'User not registered for the meeting, delete unsuccessful'], 401);
+        }
+        $meeting->users()->detach($user->id);
         $response = [
             'msg' => 'User unregistered for meeting',
             'meeting' => $meeting,
-            'user' => 'tbd',
+            'user' => $user,
             'register' => [
                 'href' => 'api/v1/meeting/registration',
                 'method' => 'POST',
